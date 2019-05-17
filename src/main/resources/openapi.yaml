@@ -1,0 +1,68 @@
+openapi: 3.0.1
+info:
+  title: Boilerplate APIs
+  description:
+    This is Boilerplate APIs.
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: balamkumar@gmail.com
+  license:
+    name: Boilerplate 1.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Boilerplate
+  url: 'https://docs...'
+servers:
+  - url: 'http://localhost:7080/boilerplate/v1'
+tags:
+  - name: Auth
+    description: Authentication Services.
+paths:
+  /login:
+    post:
+      tags:
+        - Auth
+      summary: Login API
+      description: Login API
+      operationId: login
+      requestBody:
+        description: Login Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Invalid API Key
+          content: {}
+        '403':
+          description: Cross Orgin Not Allowed
+      security:
+        - api_key: []
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    LoginResponse:
+      type: object
+      properties:
+        status:
+          type: string
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
