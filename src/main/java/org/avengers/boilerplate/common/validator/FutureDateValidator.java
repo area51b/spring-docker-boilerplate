@@ -2,8 +2,8 @@ package org.avengers.boilerplate.common.validator;
 
 import java.util.Date;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class FutureDateValidator implements
 ConstraintValidator<FutureDateConstraint, Date> {

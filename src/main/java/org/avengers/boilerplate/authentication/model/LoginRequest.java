@@ -1,6 +1,6 @@
 package org.avengers.boilerplate.authentication.model;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 import org.avengers.boilerplate.common.base.BaseModel;
 import org.avengers.boilerplate.common.validator.SQLInjectionSafe;

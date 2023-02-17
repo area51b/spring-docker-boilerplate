@@ -1,6 +1,6 @@
 package org.avengers.boilerplate.authentication;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.avengers.boilerplate.authentication.model.LoginRequest;
 import org.avengers.boilerplate.authentication.model.LoginResponse;
@@ -16,6 +16,7 @@ public class AuthenticationService extends BaseService {
 
 	public LoginResponse login(@Valid LoginRequest request) {
 		//String status = authenticationRepository.login(request.getUsername(), request.getPassword());
+		System.out.println("User name: "+ request.getUsername());
 		String status = "success";
 		
 		LoginResponse loginResponse = new LoginResponse();
