@@ -1,11 +1,12 @@
-FROM maven:3.6.1-jdk-11 as BUILD
-
-COPY m2 /root/.m2/repository/
+FROM maven:3.9-amazoncorretto-17 as BUILD
 
 COPY . /usr/src/app
-RUN mvn --batch-mode -f /usr/src/app/pom.xml clean package -o
 
-FROM openjdk:11.0.3-jre-stretch
+RUN mvn -f /usr/src/app/pom.xml dependency:go-offline
+
+RUN mvn --batch-mode -f /usr/src/app/pom.xml clean package
+
+FROM amazoncorretto:17
 EXPOSE 7080 5005
 COPY --from=BUILD /usr/src/app/target /opt/target
 WORKDIR /opt/target
