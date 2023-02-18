@@ -14,8 +14,6 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installing
 
-##### First time & if there is additional POM dependencies, run below command to add library to m2 folder
-    mvn -Dmaven.repo.local=./m2 clean package
 
 ##### Docker Image Build
     docker image build -t boilerplate .
@@ -38,7 +36,7 @@ These instructions will get you a copy of the project up and running on your loc
 This will run Swagger Editor (in detached mode) on port 80 on your machine, so you can open it by navigating to http://localhost in your browser.
 
 ##### API Testing with Swagger UI - Localhost
-    http://localhost:7080/doc/swagger-ui.html
+    http://localhost:7080/swagger-ui.html
 
 ## Built With
 
