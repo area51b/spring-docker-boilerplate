@@ -27,6 +27,14 @@ These instructions will get you a copy of the project up and running on your loc
 ##### Docker Stop
     docker stop boilerplate
 
+##### GKE Deployment
+    docker image build -t europe-west2-docker.pkg.dev/sellswift/ss-repo/spring-boilerplate:latest --platform linux/amd64 .
+    docker push europe-west2-docker.pkg.dev/sellswift/ss-repo/spring-boilerplate:latest
+    k apply -f deployment.yaml
+    k apply -f service.yaml
+    k apply -f basic-ingress.yaml
+
+
 ## Swagger UI
 
 ##### Swagger API Local Editor

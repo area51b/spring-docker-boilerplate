@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: spring-boilerplate
+  name: spring-boilerplate
+spec:
+  ports:
+  - name: 7080-7080
+    port: 7080
+    protocol: TCP
+    targetPort: 7080
+  selector:
+    app: spring-boilerplate
+  type: ClusterIP
+  #type: LoadBalancer
+status:
+  loadBalancer: {}

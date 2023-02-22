@@ -14,6 +14,14 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
     @Value("${app.swagger-ui.redirectPrefix}")
     private String redirectPrefix;
 
+    private static final String[] CLASSPATH_RESOURCE_LOCATIONS =
+    {
+        "classpath:/META-INF/resources/",
+	"classpath:/resources/",
+        "classpath:/static/", 
+	"classpath:/public/"
+    };
+
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addRedirectViewController(redirectPrefix + "/v2/api-docs", "/v2/api-docs");
@@ -22,6 +30,9 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
         registry.addRedirectViewController(
                 redirectPrefix + "/swagger-resources/configuration/security", "/swagger-resources/configuration/security");
         registry.addRedirectViewController(redirectPrefix + "/swagger-resources", "/swagger-resources");
+        //registry.addRedirectViewController("/", "index.html");
+        registry.addViewController("/").setViewName(
+                "forward:/index.html");
     }
 
     @Override
@@ -30,5 +41,8 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/swagger-ui.html");
         registry.addResourceHandler("/" + redirectPrefix + "/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
+        registry.addResourceHandler("/**")
+		.addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS)
+		.setCachePeriod(3000);
     }
 }

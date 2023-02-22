@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: spring-boilerplate
+  name: spring-boilerplate
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-boilerplate
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: spring-boilerplate
+    spec:
+      containers:
+      - image: europe-west2-docker.pkg.dev/sellswift/ss-repo/spring-boilerplate:latest
+#      - image: spring-boilerplate
+#        imagePullPolicy: Never
+        name: spring-boilerplate
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /index.html
+            port: 7080
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 10
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /index.html
+            port: 7080
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 10
+        resources: {}
+status: {}
