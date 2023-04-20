@@ -1,0 +1,6 @@
+---
+version: 1
+applications:
+- name: springboot-app
+  routes:
+  - route: springboot-app-balamkumar.apps.tas.cnasg.dellcsc.com
