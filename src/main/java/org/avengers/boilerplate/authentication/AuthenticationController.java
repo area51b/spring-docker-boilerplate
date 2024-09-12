@@ -107,6 +107,8 @@ public class AuthenticationController extends BaseController {
 					header.append("text").append(",");
 					header.append("vector");
 					
+					// header.append("text");
+
 					writer.println(header.toString().replaceAll(",$", ""));
 
 					for (QueryResultsWrapper.RowRecord res : batchResults) {
@@ -116,6 +118,9 @@ public class AuthenticationController extends BaseController {
 						row.append(res.get("source")).append(",");
 						row.append(res.get("text").toString().replaceAll(",", "-")).append(",");
 						row.append(res.get("vector"));
+
+						// row.append(res.get("text").toString().replaceAll(",", "-"));
+
 						//write to csv file
 						writer.println(row.toString());
 					}
