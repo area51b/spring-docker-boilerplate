@@ -2,6 +2,7 @@ package org.avengers.boilerplate.authentication;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,7 +13,14 @@ import org.avengers.boilerplate.authentication.model.LoginRequest;
 import org.avengers.boilerplate.authentication.model.LoginResponse;
 import org.avengers.boilerplate.common.base.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -31,7 +39,7 @@ import io.milvus.response.QueryResultsWrapper;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/boilerplate/v1/")
+@RequestMapping(value = "/milvus/v1/")
 public class AuthenticationController extends BaseController {
 
 	@Autowired
@@ -47,10 +55,40 @@ public class AuthenticationController extends BaseController {
 		if(!COMMON_API_KEY.equals(apiKey)) {
 			throw new Exception("Not authorized to access the service.");
 		}
+		
+		return authenticationService.login(request);
+	}
+
+    @GetMapping("/export")
+    public ResponseEntity<Resource> downloadFile(@RequestHeader("api_key") String apiKey) throws Exception {
+		if(!COMMON_API_KEY.equals(apiKey)) {
+			throw new Exception("Not authorized to access the service.");
+		}
+
+        String filePath = export();
+        File file = new File(filePath);
+
+        if (file.exists()) {
+            FileSystemResource fileResource = new FileSystemResource(file);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentLength(file.length());
+            headers.setContentDispositionFormData("attachment", file.getName());
+
+            return new ResponseEntity<>(fileResource, headers, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+	private String export() throws Exception {
+		// Write the results to a CSV file, file name with timestamp
+		String csvFile = "/tmp/results_" + System.currentTimeMillis() + ".csv";
 
 		try {						
 			ConnectParam connectParam = ConnectParam.newBuilder()
-				.withHost("localhost")
+				.withHost("milvus")
 				.withPort(19530)
 				.build();
 			MilvusClient milvusClient = new MilvusServiceClient(connectParam);
@@ -84,8 +122,6 @@ public class AuthenticationController extends BaseController {
 
 			QueryIterator queryIterator = response.getData();
 			int count = 0;
-			// Write the results to a CSV file
-			String csvFile = "results.csv";
 			try (PrintWriter writer = new PrintWriter(new FileWriter(csvFile))) {
 				while (true) {
 					List<QueryResultsWrapper.RowRecord> batchResults = queryIterator.next();
@@ -129,14 +165,16 @@ public class AuthenticationController extends BaseController {
 
 			} catch (IOException e) {
 				System.err.println("Error writing to CSV file: " + e.getMessage());
+				throw e;
 			}
 
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
+			throw ex;
 		}
-		
-		return authenticationService.login(request);
+
+		return csvFile;
 	}
 
 }

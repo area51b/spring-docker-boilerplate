@@ -17,6 +17,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ##### Docker Image Build
     docker image build -t boilerplate .
+    docker buildx build --load --platform linux/amd64 -t balamkumar/springboot-app:latest .
 
 ##### Docker Run
     docker container run --rm --name boilerplate -p 7080:7080 -d boilerplate
